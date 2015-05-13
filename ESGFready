@@ -7,8 +7,6 @@ import subprocess
 
 # variables
 os_name = subprocess.check_output('uname', shell=True)
-apt_system_flag = None
-yum_system_flag = None
 apt_system_list = ['Ubuntu', 'Xubuntu', 'Kubuntu', 'Lubuntu', 'Debian']
 yum_system_list = ['Fedora', 'Red', 'Korora', 'CentOS']
 
@@ -25,7 +23,8 @@ elif ('Linux' in os_name):  # os is linux
     print('Operating System: ')
     print(os_distro)
     if (os_distro in apt_system_list):
-        apt_system_flag = True
+        wget_installed = subprocess.check_output('echo $(dpkg-query -W -f="${Status}" wget 2>/dev/null | grep -c "ok installed")', shell=True)
+        print(wget_installed)
     elif (os_distro in yum_system_list):
         yum_system_flag = True
 else:  # os is windows
