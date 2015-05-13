@@ -276,15 +276,15 @@ def checklist_mac():
 
 
 def checklist_linux():
-    needs_installation = None
+    no_need_to_install = True
     app_list = ['wget', 'java', 'grads', 'ncview']
     for app in app_list:
         if '0' in subprocess.check_output('which ' + app + ' | grep -c ' + app + '; exit 0', shell=True, stderr=subprocess.STDOUT):
             print(app.capitalize() + " [NOT INSTALLED]")
-            needs_installation = True
+            no_need_to_install = False
         else:
             print(app.capitalize() + " [INSTALLED]")
-    if not (needs_installation):
+    if (no_need_to_install):
         print("\nYour system is ready to download and visualize data from ESGF")
         print("\nScript finished")
         sys.exit()
