@@ -22,11 +22,11 @@ if ('Darwin' in os_name):  # os is mac
     print('mac')
 elif ('Linux' in os_name):  # os is linux
     os_distro = subprocess.check_output('cat /etc/issue', shell=True).split()[0]
-    print('Operating System: ', os_distro)
+    print('Operating System: ')
+    print(os_distro)
     if (os_distro in apt_system_list):
         apt_system_flag = True
     elif (os_distro in yum_system_list):
         yum_system_flag = True
-    print(apt_system_flag, yum_system_flag)
 else:  # os is windows
     print('windows')
