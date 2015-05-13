@@ -57,14 +57,14 @@ def check_java_linux():
     global yum_system_list
     global os_java
 
-    print("\nChecking if java is installed...")
+    print("\nChecking if Java is installed...")
     java_status = subprocess.check_output("echo $(java -version 2>&1)", shell=True)
     if ('openjdk' in java_status and ('1.8' in java_status or '1.7' in java_status)):
-        print("OpenJDK is installed")
+        print("OpenJDK is already installed")
     elif (("Java(TM)" in java_status) and ('1.8' in java_status or '1.7' in java_status)):
-        print("Oracle Java is installed")
+        print("Oracle Java is already installed")
     else:
-        print("No Java JDK found")
+        print("No Java JDK found, installing...")
 # end of defs
 
 clear_cli()
