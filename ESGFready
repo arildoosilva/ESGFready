@@ -35,13 +35,15 @@ def check_wget_linux():
         """ installs dpkg in the os with yum package manager
         to be able to query the installed packages and look for wget
         """
-        print("Dependency required, installing dpkg...")
-        try:
-            os.system('yum install -y dpkg &>/dev/null')
-        except os.error:
-            print("An error has ocurred, please try again")
-            sys.exit()
-        print("Dependency installed, resuming...")
+        dpkg_status = subprocess.check_output("echo $(yum list installed dpkg 2>/dev/null | grep -c 'Installed Packages')", shell=True)
+        if ('0' in dpkg_status):
+            print("Dependency required, installing dpkg...")
+            try:
+                os.system('yum install -y dpkg &>/dev/null')
+            except os.error:
+                print("An error has ocurred, please try again")
+                sys.exit()
+            print("Dependency installed, resuming...")
     wget_status = subprocess.check_output("echo $(dpkg-query -W -f='${Status}' wget 2>/dev/null | grep -c 'ok installed')", shell=True)
     if ('1' in wget_status):
         print("Wget is already installed")
