@@ -76,13 +76,14 @@ def install_java_apt():
         print("The script will install Java JDK 8 in your system")
         print("Please accept the License Agreement when prompted")
         raw_input('\nPress any key to continue...')
-        os.system("add-apt-repository -y ppa:webupd8team/java &>/dev/null")
-        os.system("apt-get update &>/dev/null")
+        os.system("add-apt-repository -y ppa:webupd8team/java")
+        os.system("apt-get update")
         os.system("apt-get install -y oracle-java8-installer")
         os.system("apt-get install -y oracle-java8-set-default")
     except os.error:
         print("An error has ocurred, please try again")
         sys.exit()
+    clear_cli()
     print("Java installed")
     os_java = True
 
