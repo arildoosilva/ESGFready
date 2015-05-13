@@ -27,9 +27,9 @@ def check_wget_linux(os_distro, apt_system_list, yum_system_list):
             sys.exit()
         print("Dependency installed, resuming...")
     wget_status = subprocess.check_output("echo $(dpkg-query -W -f='${Status}' wget 2>/dev/null | grep -c 'ok installed')", shell=True)
-    if (wget_status == 1):
+    if ('1' in wget_status):
         print("Wget is already installed")
-    elif (wget_status == 0):
+    elif ('0' in wget_status):
         print("Wget is not installed, installing...")
         try:
             if (os_distro in yum_system_list):
