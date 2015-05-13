@@ -10,10 +10,26 @@ import sys
 os_name = subprocess.check_output('uname', shell=True)
 apt_system_list = ['Ubuntu', 'Xubuntu', 'Kubuntu', 'Lubuntu', 'Debian']
 yum_system_list = ['Fedora', 'Red', 'Korora', 'CentOS']
+os_wget = None
+os_java = None
+os_grads = None
+os_ncview = None
+os_xcode = None
+os_xcode_clt = None
+os_homebrew = None
 
 
 # defs
-def check_wget_linux(os_distro, apt_system_list, yum_system_list):
+def clear_cli():  # clears the terminal
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+
+def check_wget_linux():
+    global os_distro
+    global apt_system_list
+    global yum_system_list
+    global os_wget
+
     print("\nChecking if wget is installed...")
     if (os_distro in yum_system_list):
         """ installs dpkg in the os with yum package manager
@@ -40,14 +56,24 @@ def check_wget_linux(os_distro, apt_system_list, yum_system_list):
             print("An error has ocurred, please try again")
             sys.exit()
         print("Wget installed")
+        os_wget = True
 
-os.system('cls' if os.name == 'nt' else 'clear')
 
+def check_java_linux():
+    global os_distro
+    global apt_system_list
+    global yum_system_list
+    global os_java
 
+    print("\nChecking if java is installed...")
+    java_status = subprocess.check_output("echo $(java -version 2>&1 | sed 's/java version \"\(.*\)\.\(.*\)\..*\"/\1\2/; 1q')", shell=True)
+    print(java_status)
 # end of defs
 
-# check if the script has the right privileges
-if 'root' not in subprocess.check_output('whoami', shell=True):
+clear_cli()
+if 'root' not in subprocess.check_output('whoami', shell=True):  # check if the script has the right privileges
+    print("Must be root to execute the script" +
+          "\n[Usage]: sudo ./ESGFready")
     sys.exit()
 
 print('This script will check if your system is ready to download and visualize data from ESGF')
@@ -59,6 +85,7 @@ elif ('Linux' in os_name):  # os is linux
     os_distro = subprocess.check_output('cat /etc/issue', shell=True).split()[0]
     print('Operating System: ')
     print(os_distro)
-    check_wget_linux(os_distro, apt_system_list, yum_system_list)
+    check_wget_linux()
+    check_java_linux()
 else:  # os is windows
     print('windows')
