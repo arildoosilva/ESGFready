@@ -18,6 +18,8 @@ os_ncview = None
 os_xcode = None
 os_xcode_clt = None
 os_homebrew = None
+flag_install_grads = None
+flag_install_ncview = None
 
 
 # defs
@@ -49,7 +51,7 @@ def check_wget_linux():
             print("An error has ocurred, please try again")
             sys.exit()
         print("Wget installed")
-        os_wget = True
+    os_wget = True
 
 
 def check_java_linux():
@@ -62,10 +64,12 @@ def check_java_linux():
     java_status = subprocess.check_output("echo $(java -version 2>&1)", shell=True)
     if ('openjdk' in java_status and ('1.8' in java_status or '1.7' in java_status)):
         print("OpenJDK is already installed")
+        os_java = True
     elif (("Java(TM)" in java_status) and ('1.8' in java_status or '1.7' in java_status)):
         print("Oracle Java is already installed")
+        os_java = True
     else:
-        print("No Java JDK found, installing...")
+        print("No Java JDK found, installing...\n")
         if (os_distro in apt_system_list):
             install_java_apt()
         elif (os_distro in yum_system_list):
@@ -73,6 +77,7 @@ def check_java_linux():
 
 
 def install_java_apt():
+    global os_java
     try:
         print("\nThe script will install Java JDK 8 in your system")
         print("Please accept the License Agreement when prompted")
@@ -90,6 +95,7 @@ def install_java_apt():
 
 
 def install_java_yum():
+    global os_java
     try:
         os_arch = subprocess.check_output("uname -m | grep -c 64", shell=True)  # checks if the os is 64 or 32bit
         if ("1" in os_arch):
@@ -128,10 +134,61 @@ def install_java_yum():
     except os.error:
         print("An error has ocurred, please try again")
         sys.exit()
-    print("Java installed")
+    print("\nJava installed")
     os_java = True
+
+
+def ask_for_grads():
+    global flag_install_grads
+    answer = raw_input("\nDo you want to install grads? [y/n]")
+    print("")
+    if ("y" in answer):
+        print("The script will install grads")
+        flag_install_grads = True
+    elif ("n" in answer):
+        print("The script will not install grads")
+        flag_install_grads = False
+
+
+def install_grads_linux():
+    global os_grads
+    try:
+        if (os_distro in yum_system_list):
+            os.system('yum install -y grads')
+        elif (os_distro in apt_system_list):
+            os.system('apt-get install -y grads')
+    except os.error:
+        print("An error has ocurred, please try again")
+        sys.exit()
+    os_grads = True
+
+
+def ask_for_ncview():
+    global flag_install_ncview
+    answer = raw_input("\nDo you want to install ncview? [y/n]")
+    print("")
+    if ("y" in answer):
+        print("The script will install ncview")
+        flag_install_ncview = True
+    elif ("n" in answer):
+        print("The script will not install ncview")
+        flag_install_ncview = False
+
+
+def install_ncview_linux():
+    global os_ncview
+    try:
+        if (os_distro in yum_system_list):
+            os.system('yum install -y ncview')
+        elif (os_distro in apt_system_list):
+            os.system('apt-get install -y ncview')
+    except os.error:
+        print("An error has ocurred, please try again")
+        sys.exit()
+    os_ncview = True
 # end of defs
 
+# main
 clear_cli()
 if 'root' not in subprocess.check_output('whoami', shell=True):  # check if the script has the right privileges
     print("Must be root to execute the script" +
@@ -143,15 +200,33 @@ raw_input('\nPress any key to start...')
 
 if ('Darwin' in os_name):  # os is mac
     print('mac')
+
 elif ('Linux' in os_name):  # os is linux
     os_distro = subprocess.check_output('cat /etc/issue', shell=True).split()[0]
     print('Operating System: ')
     print(os_distro)
     check_wget_linux()
     check_java_linux()
-    # check if every flag is true first
-    print("Installation Successful!" +
-          "\n\nYour system's environment variables have been changed, please reopen the terminal" +
-          "\nOr log out and log back in")
+    ask_for_grads()
+    if (flag_install_grads):
+        install_grads_linux()
+    ask_for_ncview()
+    if (flag_install_ncview):
+        install_ncview_linux()
+
+    clear_cli()
+    print("Installation summary:\n")
+    if (os_wget):
+        print("\tWget [OK]")
+    if (os_java):
+        print("\tJava [OK]" +
+              "\n\t\tYour system's environment variables have been changed, please reopen the terminal" +
+              "\n\t\tOr log out and log back in")
+    if (flag_install_grads and os_grads):
+        print("\tGrads [OK]")
+    if (flag_install_ncview and os_ncview):
+        print("\tNcview [OK]")
+    print("\n\nScript finished")
+
 else:  # os is windows
     print('windows')
