@@ -154,6 +154,7 @@ def ask_for_grads():
     if ("y" in answer):
         print("The script will install grads")
         flag_install_grads = True
+        install_grads_linux()
     elif ("n" in answer):
         print("The script will not install grads")
         flag_install_grads = False
@@ -165,7 +166,7 @@ def install_grads_linux():
         if (os_distro in yum_system_list):
             os.system('yum install -y grads &>/dev/null')
         elif (os_distro in apt_system_list):
-            os.system('apt-get install -y grads &>/dev/null')
+            os.system('apt-get install -y grads')
     except os.error:
         print("An error has ocurred, please try again")
         sys.exit()
@@ -179,6 +180,7 @@ def ask_for_ncview():
     if ("y" in answer):
         print("The script will install ncview")
         flag_install_ncview = True
+        install_ncview_linux()
     elif ("n" in answer):
         print("The script will not install ncview")
         flag_install_ncview = False
@@ -190,7 +192,7 @@ def install_ncview_linux():
         if (os_distro in yum_system_list):
             os.system('yum install -y ncview &>/dev/null')
         elif (os_distro in apt_system_list):
-            os.system('apt-get install -y ncview &>/dev/null')
+            os.system('apt-get install -y ncview')
     except os.error:
         print("An error has ocurred, please try again")
         sys.exit()
@@ -217,11 +219,7 @@ elif ('Linux' in os_name):  # os is linux
     check_wget_linux()
     check_java_linux()
     ask_for_grads()
-    if (flag_install_grads):
-        install_grads_linux()
     ask_for_ncview()
-    if (flag_install_ncview):
-        install_ncview_linux()
 
     clear_cli()
 
