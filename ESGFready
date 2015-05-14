@@ -157,8 +157,6 @@ def ask_for_grads():
     elif ("n" in answer):
         print("The script will not install grads")
         flag_install_grads = False
-    else:
-        print("Wrong input, skipping grads installation")
 
 
 def install_grads_linux():
@@ -184,8 +182,6 @@ def ask_for_ncview():
     elif ("n" in answer):
         print("The script will not install ncview &>/dev/null")
         flag_install_ncview = False
-    else:
-        print("Wrong input, skipping ncview installation")
 
 
 def install_ncview_linux():
