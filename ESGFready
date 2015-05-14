@@ -97,6 +97,7 @@ def install_java_apt():
 def install_java_yum():
     global os_java
     try:
+        os.system("rm /opt/jdk*.tar.gz")  # removes any compressed jdk files downloaded before
         os_arch = subprocess.check_output("uname -m | grep -c 64", shell=True)  # checks if the os is 64 or 32bit
         if ("1" in os_arch):
             os.system('wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u45-b14/jdk-8u45-linux-x64.tar.gz" -P /opt')
@@ -104,6 +105,7 @@ def install_java_yum():
         elif ("0" in os_arch):
             os.system('wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u45-b14/jdk-8u45-linux-i586.tar.gz" -P /opt')
             os.system('tar xzf /opt/jdk-8u45-linux-i586.tar.gz')
+        os.system("rm /opt/jdk*.tar.gz")
         os.system('alternatives --install /usr/bin/java java /opt/jdk1.8.0_45/bin/java 2')
         print('Java installed, configuring...')
 
@@ -140,7 +142,7 @@ def install_java_yum():
 
 def ask_for_grads():
     global flag_install_grads
-    answer = raw_input("\nDo you want to install grads? [y/n]")
+    answer = raw_input("\nDo you want to install grads? [y/n] ")
     print("")
     if ("y" in answer):
         print("The script will install grads")
@@ -154,9 +156,9 @@ def install_grads_linux():
     global os_grads
     try:
         if (os_distro in yum_system_list):
-            os.system('yum install -y grads')
+            os.system('yum install -y grads &>/dev/null')
         elif (os_distro in apt_system_list):
-            os.system('apt-get install -y grads')
+            os.system('apt-get install -y grads &>/dev/null')
     except os.error:
         print("An error has ocurred, please try again")
         sys.exit()
@@ -165,13 +167,13 @@ def install_grads_linux():
 
 def ask_for_ncview():
     global flag_install_ncview
-    answer = raw_input("\nDo you want to install ncview? [y/n]")
+    answer = raw_input("\nDo you want to install ncview? [y/n] ")
     print("")
     if ("y" in answer):
-        print("The script will install ncview")
+        print("The script will install ncview &>/dev/null")
         flag_install_ncview = True
     elif ("n" in answer):
-        print("The script will not install ncview")
+        print("The script will not install ncview &>/dev/null")
         flag_install_ncview = False
 
 
@@ -220,7 +222,8 @@ elif ('Linux' in os_name):  # os is linux
         print("\tWget [OK]")
     if (os_java):
         print("\tJava [OK]" +
-              "\n\t\tYour system's environment variables have been changed, please reopen the terminal" +
+              "\n\t\tThe Java installation changed your system's environment variables" +
+              "\n\t\tPlease reopen the terminal" +
               "\n\t\tOr log out and log back in")
     if (flag_install_grads and os_grads):
         print("\tGrads [OK]")
