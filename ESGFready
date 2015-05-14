@@ -177,10 +177,10 @@ def ask_for_ncview():
     answer = raw_input("\nDo you want to install ncview? [y/n] ")
     print("")
     if ("y" in answer):
-        print("The script will install ncview &>/dev/null")
+        print("The script will install ncview")
         flag_install_ncview = True
     elif ("n" in answer):
-        print("The script will not install ncview &>/dev/null")
+        print("The script will not install ncview")
         flag_install_ncview = False
 
 
@@ -188,9 +188,9 @@ def install_ncview_linux():
     global os_ncview
     try:
         if (os_distro in yum_system_list):
-            os.system('yum install -y ncview')
+            os.system('yum install -y ncview &>/dev/null')
         elif (os_distro in apt_system_list):
-            os.system('apt-get install -y ncview')
+            os.system('apt-get install -y ncview &>/dev/null')
     except os.error:
         print("An error has ocurred, please try again")
         sys.exit()
