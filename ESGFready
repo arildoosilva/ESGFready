@@ -18,6 +18,8 @@ os_ncview = None
 os_xcode = None
 os_xcode_clt = None
 os_homebrew = None
+flag_install_wget = None
+flag_install_java = None
 flag_install_grads = None
 flag_install_ncview = None
 
@@ -47,6 +49,7 @@ def check_wget_linux():
                 os.system('yum install -y wget &>/dev/null')
             elif (os_distro in apt_system_list):
                 os.system('apt-get install -y wget &>/dev/null')
+            flag_install_wget = True
         except os.error:
             print("An error has ocurred, please try again")
             sys.exit()
@@ -78,6 +81,7 @@ def check_java_linux():
 
 def install_java_apt():
     global os_java
+    global flag_install_java
     try:
         print("\nThe script will install Java JDK 8 in your system")
         print("Please accept the License Agreement when prompted")
@@ -86,6 +90,7 @@ def install_java_apt():
         os.system("apt-get update")
         os.system("apt-get install -y oracle-java8-installer")
         os.system("apt-get install -y oracle-java8-set-default")
+        flag_install_java = True
     except os.error:
         print("An error has ocurred, please try again")
         sys.exit()
@@ -96,6 +101,7 @@ def install_java_apt():
 
 def install_java_yum():
     global os_java
+    global flag_install_java
     try:
         os.system("rm /opt/jdk*.tar.gz")  # removes any compressed jdk files downloaded before
         os_arch = subprocess.check_output("uname -m | grep -c 64", shell=True)  # checks if the os is 64 or 32bit
@@ -133,6 +139,7 @@ def install_java_yum():
         os.system('echo "export JAVA_HOME=/opt/jdk1.8.0_45" >> /etc/profile.d/custom.sh')
         os.system('echo "export JRE_HOME=/opt/jdk1.8.0_45/jre" >> /etc/profile.d/custom.sh')
         os.system('echo "export PATH=$PATH:/opt/jdk1.8.0_45/bin:/opt/jdk1.8.0_45/jre/bin" >> /etc/profile.d/custom.sh')
+        flag_install_java = True
     except os.error:
         print("An error has ocurred, please try again")
         sys.exit()
@@ -218,13 +225,17 @@ elif ('Linux' in os_name):  # os is linux
 
     clear_cli()
     print("Installation summary:\n")
-    if (os_wget):
+    if (flag_install_wget and os_wget):
         print("\tWget [OK]")
-    if (os_java):
+    elif (flag_install_wget is None and os_wget):
+        print("\tWget [already installed]")
+    if (flag_install_java and os_java):
         print("\tJava [OK]" +
               "\n\t\tThe Java installation changed your system's environment variables" +
               "\n\t\tPlease reopen the terminal" +
               "\n\t\tOr log out and log back in")
+    elif (flag_install_java is None and os_java):
+        print("\tJava [already installed]")
     if (flag_install_grads and os_grads):
         print("\tGrads [OK]")
     if (flag_install_ncview and os_ncview):
