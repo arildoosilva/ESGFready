@@ -152,7 +152,7 @@ def ask_for_grads():
     answer = raw_input("\nDo you want to install grads? [y/n] ")
     print("")
     if ("y" in answer):
-        print("The script will install grads")
+        print("The script is installing grads...")
         flag_install_grads = True
         install_grads_linux()
     elif ("n" in answer):
@@ -167,6 +167,7 @@ def install_grads_linux():
             os.system('yum install -y grads &>/dev/null')
         elif (os_distro in apt_system_list):
             os.system('apt-get install -y grads')
+        print("\nFinsished installing grads")
     except os.error:
         print("An error has ocurred, please try again")
         sys.exit()
@@ -178,7 +179,7 @@ def ask_for_ncview():
     answer = raw_input("\nDo you want to install ncview? [y/n] ")
     print("")
     if ("y" in answer):
-        print("The script will install ncview")
+        print("The script is installing ncview...")
         flag_install_ncview = True
         install_ncview_linux()
     elif ("n" in answer):
@@ -193,6 +194,7 @@ def install_ncview_linux():
             os.system('yum install -y ncview &>/dev/null')
         elif (os_distro in apt_system_list):
             os.system('apt-get install -y ncview')
+        print("\nFinsished installing ncview")
     except os.error:
         print("An error has ocurred, please try again")
         sys.exit()
