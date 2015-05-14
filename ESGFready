@@ -5,6 +5,7 @@
 import os
 import subprocess
 import sys
+import time
 
 # variables
 os_name = subprocess.check_output('uname', shell=True)
@@ -73,7 +74,7 @@ def check_java_linux():
 
 def install_java_apt():
     try:
-        print("The script will install Java JDK 8 in your system")
+        print("\nThe script will install Java JDK 8 in your system")
         print("Please accept the License Agreement when prompted")
         raw_input('\nPress any key to continue...')
         os.system("add-apt-repository -y ppa:webupd8team/java")
@@ -90,7 +91,39 @@ def install_java_apt():
 
 def install_java_yum():
     try:
-        print()
+        os_arch = subprocess.check_output("uname -m | grep -c 64", shell=True)  # checks if the os is 64 or 32bit
+        if ("1" in os_arch):
+            os.system('wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u45-b14/jdk-8u45-linux-x64.tar.gz" -P /opt')
+            os.system('tar xzf /opt/jdk-8u45-linux-x64.tar.gz')
+        elif ("0" in os_arch):
+            os.system('wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u45-b14/jdk-8u45-linux-i586.tar.gz" -P /opt')
+            os.system('tar xzf /opt/jdk-8u45-linux-i586.tar.gz')
+        os.system('alternatives --install /usr/bin/java java /opt/jdk1.8.0_45/bin/java 2')
+        print('Java installed, configuring...')
+
+        time.sleep(2)
+
+        print('\nJava needs to be set manually, please choose the latest version when prompted')
+        raw_input('\nPress any key to continue...')
+        clear_cli()
+        print('Choose the latest version\n')
+        os.system('alternatives --config java')
+        os.system('alternatives --install /usr/bin/jar jar /opt/jdk1.8.0_45/bin/jar 2')
+        os.system('alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_45/bin/javac 2')
+        os.system('alternatives --set jar /opt/jdk1.8.0_45/bin/jar')
+        os.system('alternatives --set javac /opt/jdk1.8.0_45/bin/javac')
+
+        print("Finished installing Java\n")
+        os.system('java -version')
+
+        # sets environment variables
+        os.system('chmod 777 /etc/profile.d/custom.sh')
+        os.system('export JAVA_HOME=/opt/jdk1.8.0_45')
+        os.system('export JRE_HOME=/opt/jdk1.8.0_45/jre')
+        os.system('export PATH=$PATH:/opt/jdk1.8.0_45/bin:/opt/jdk1.8.0_45/jre/bin')
+        os.system('echo "export JAVA_HOME=/opt/jdk1.8.0_45" >> /etc/profile.d/custom.sh')
+        os.system('echo "export JRE_HOME=/opt/jdk1.8.0_45/jre" >> /etc/profile.d/custom.sh')
+        os.system('echo "export PATH=$PATH:/opt/jdk1.8.0_45/bin:/opt/jdk1.8.0_45/jre/bin" >> /etc/profile.d/custom.sh')
     except os.error:
         print("An error has ocurred, please try again")
         sys.exit()
@@ -115,5 +148,9 @@ elif ('Linux' in os_name):  # os is linux
     print(os_distro)
     check_wget_linux()
     check_java_linux()
+    # check if every flag is true first
+    print("Installation Successful!" +
+          "\n\nYour system's environment variables have been changed, please reopen the terminal" +
+          "\nOr log out and log back in")
 else:  # os is windows
     print('windows')
