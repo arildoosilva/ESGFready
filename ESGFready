@@ -224,11 +224,13 @@ elif ('Linux' in os_name):  # os is linux
         install_ncview_linux()
 
     clear_cli()
+
     print("Installation summary:\n")
     if (flag_install_wget and os_wget):
         print("\tWget [OK]")
     elif (flag_install_wget is None and os_wget):
         print("\tWget [already installed]")
+
     if (flag_install_java and os_java):
         print("\tJava [OK]" +
               "\n\t\tThe Java installation changed your system's environment variables" +
@@ -236,10 +238,17 @@ elif ('Linux' in os_name):  # os is linux
               "\n\t\tOr log out and log back in")
     elif (flag_install_java is None and os_java):
         print("\tJava [already installed]")
+
     if (flag_install_grads and os_grads):
         print("\tGrads [OK]")
+    elif (flag_install_grads is None):
+        print("\tGrads [user has chosen not to install]")
+
     if (flag_install_ncview and os_ncview):
         print("\tNcview [OK]")
+    elif (flag_install_ncview):
+        print("\tNcview [user has chosen not to install]")
+
     print("\n\nScript finished")
 
 else:  # os is windows
