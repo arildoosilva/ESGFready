@@ -15,9 +15,6 @@ os_wget = None
 os_java = None
 os_grads = None
 os_ncview = None
-os_xcode = None
-os_xcode_clt = None
-os_homebrew = None
 flag_install_wget = None
 flag_install_java = None
 flag_install_grads = None
@@ -148,13 +145,17 @@ def install_java_yum():
 
 
 def ask_for_grads():
+    global os_name
     global flag_install_grads
     answer = raw_input("\nDo you want to install grads? [y/n] ")
     print("")
     if ("y" in answer):
         print("The script is installing grads...")
         flag_install_grads = True
-        install_grads_linux()
+        if ("Darwin" in os_name):
+            install_grads_mac()
+        elif ("Linux" in os_name):
+            install_grads_linux()
     elif ("n" in answer):
         print("The script will not install grads")
         flag_install_grads = False
@@ -181,7 +182,10 @@ def ask_for_ncview():
     if ("y" in answer):
         print("The script is installing ncview...")
         flag_install_ncview = True
-        install_ncview_linux()
+        if ("Darwin" in os_name):
+            install_ncview_mac()
+        elif ("Linux" in os_name):
+            install_ncview_linux()
     elif ("n" in answer):
         print("The script will not install ncview")
         flag_install_ncview = False
@@ -199,6 +203,56 @@ def install_ncview_linux():
         print("An error has ocurred, please try again")
         sys.exit()
     os_ncview = True
+
+
+def install_homebrew_wget():
+    print("\nThe script will install Homebrew and Wget if necessary" +
+          "\nChecking if Homebrew is installed...\n")
+    os.system('su $SUDO_USER -c \'ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"\'')
+    print("\nChecking if Wget is installed...\n")
+    os.system("su $SUDO_USER -c 'brew install wget'")
+
+
+def check_java_mac():
+    print("\nChecking if Java is installed...")
+    java_status = subprocess.check_output("echo $(java -version 2>&1)", shell=True)
+    if (("Java(TM)" in java_status) and ('1.8' in java_status or '1.7' in java_status)):
+        print("\nOracle Java is already installed\n")
+    else:
+        print("\nNo Java JDK found, installing...\n")
+        install_java_mac()
+
+
+def install_java_mac():
+    os.system("rm ~/Downloads/jdk*.dmg &>/dev/null")  # removes any setup files downloaded before
+    print("Downloading Java JDK...\n")
+    os.system('wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u45-b14/jdk-8u45-macosx-x64.dmg" -P ~/Downloads &>/dev/null')
+    print("Download finished, please open your downloads folder and install JDK\n")
+    raw_input("\nPress any key to continue after the JDK installation has finished")
+
+
+def install_x11_mac():
+    print("XQuartz is required if you want to install grads or ncview")
+    answer = raw_input("Do you want to install XQuartz? [y/n] ")
+    print("")
+    if ("y" in answer):
+        os.system("rm ~/Downloads/XQuartz*.dmg &>/dev/null")  # removes any setup files downloaded before
+        print("Downloading XQuartz X11...\n")
+        os.system('wget http://xquartz.macosforge.org/downloads/SL/XQuartz-2.7.7.dmg -P ~/Downloads &>/dev/null')
+        print("Download finished, please open your downloads folder and install XQuartz\n")
+        raw_input("\nPress any key to continue after the XQuartz installation has finished")
+    elif ("n" in answer):
+        print("The script will not install XQuartz")
+
+
+def install_grads_mac():
+    os.system('brew tap homebrew/science &>/dev/null')
+    os.system("su $SUDO_USER -c 'brew install grads'")
+
+
+def install_ncview_mac():
+    os.system('brew tap homebrew/science &>/dev/null')
+    os.system("su $SUDO_USER -c 'brew install ncview'")
 # end of defs
 
 # main
@@ -212,7 +266,11 @@ print('This script will check if your system is ready to download and visualize 
 raw_input('\nPress any key to start...')
 
 if ('Darwin' in os_name):  # os is mac
-    print('mac')
+    install_homebrew_wget()
+    check_java_mac()
+    install_x11_mac()
+    ask_for_grads()
+    ask_for_ncview()
 
 elif ('Linux' in os_name):  # os is linux
     os_distro = subprocess.check_output('cat /etc/issue', shell=True).split()[0]
@@ -252,4 +310,4 @@ elif ('Linux' in os_name):  # os is linux
     print("\n\nScript finished")
 
 else:  # os is windows
-    print('windows')
+    print('Your system is windows, execute the alternative script')
