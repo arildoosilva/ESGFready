@@ -107,10 +107,10 @@ def install_java_yum():
         os_arch = subprocess.check_output("uname -m | grep -c 64", shell=True)  # checks if the os is 64 or 32bit
         if ("1" in os_arch):
             os.system('wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u45-b14/jdk-8u45-linux-x64.tar.gz" -P /opt')
-            os.system('tar xzf /opt/jdk-8u45-linux-x64.tar.gz')
+            os.system('tar xzf /opt/jdk-8u45-linux-x64.tar.gz -C /opt')
         elif ("0" in os_arch):
             os.system('wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u45-b14/jdk-8u45-linux-i586.tar.gz" -P /opt')
-            os.system('tar xzf /opt/jdk-8u45-linux-i586.tar.gz')
+            os.system('tar xzf /opt/jdk-8u45-linux-i586.tar.gz -C /opt')
         os.system("rm /opt/jdk*.tar.gz &>/dev/null")
         os.system('alternatives --install /usr/bin/java java /opt/jdk1.8.0_45/bin/java 2')
         print('Java installed, configuring...')
@@ -157,6 +157,8 @@ def ask_for_grads():
     elif ("n" in answer):
         print("The script will not install grads")
         flag_install_grads = False
+    else:
+        print("Wrong input, skipping grads installation")
 
 
 def install_grads_linux():
@@ -182,6 +184,8 @@ def ask_for_ncview():
     elif ("n" in answer):
         print("The script will not install ncview &>/dev/null")
         flag_install_ncview = False
+    else:
+        print("Wrong input, skipping ncview installation")
 
 
 def install_ncview_linux():
