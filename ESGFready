@@ -241,12 +241,12 @@ elif ('Linux' in os_name):  # os is linux
 
     if (flag_install_grads and os_grads):
         print("\tGrads [OK]")
-    elif (flag_install_grads is None):
+    elif (flag_install_grads is False):
         print("\tGrads [user has chosen not to install]")
 
     if (flag_install_ncview and os_ncview):
         print("\tNcview [OK]")
-    elif (flag_install_ncview):
+    elif (flag_install_ncview is False):
         print("\tNcview [user has chosen not to install]")
 
     print("\n\nScript finished")
