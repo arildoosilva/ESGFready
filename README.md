@@ -9,6 +9,6 @@ Run `sudo ESGFready` on terminal
 ## On Windows
 
 1. Open Windows Powershell as Administrator and change the Execution Policy
-`Set-ExecutionPolicy Unrestricted`
+`Set-ExecutionPolicy Unrestricted`, answer **yes** when prompted
 
 2. Run `ESGFready.ps1`
