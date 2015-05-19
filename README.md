@@ -21,6 +21,7 @@ Use these commands on terminal:
 `Set-ExecutionPolicy Unrestricted`, answer **yes** when prompted.
 
 Use these commands on Powershell as Administrator:
+
 2. `cd ~/Desktop/ESGFready-master`
 
 3. `.\ESGFready.ps1`
