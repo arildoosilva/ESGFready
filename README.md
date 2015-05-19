@@ -1,6 +1,6 @@
 # ESGFready
 
-Script to check if the user's system is ready to download and visualize data through ESGF.
+Script to check and install the requirements needed to download and visualize data through ESGF.
 
 ## On Mac or Linux
 
