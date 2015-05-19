@@ -17,10 +17,9 @@ Use these commands on terminal:
 
 #### On Windows
 
-1. Open Windows Powershell as Administrator and change the Execution Policy.
-`Set-ExecutionPolicy Unrestricted`, answer **yes** when prompted.
+Open Windows Powershell as Administrator and use these commands:
 
-Use these commands on Powershell as Administrator:
+1. `Set-ExecutionPolicy Unrestricted` (answer **yes** when prompted)
 
 2. `cd ~/Desktop/ESGFready-master`
 
