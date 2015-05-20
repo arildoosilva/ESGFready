@@ -80,7 +80,8 @@ def install_java_apt():
     global os_java
     global flag_install_java
     try:
-        print("\nThe script will install Java JDK 8 in your system")
+        clear_cli()
+        print("The script will install Java JDK 8 in your system")
         print("Please accept the License Agreement when prompted")
         raw_input('\nPress any key to continue...')
         os.system("add-apt-repository -y ppa:webupd8team/java")
