@@ -34,9 +34,11 @@ def check_wget_linux():
 
     print("\nChecking if wget is installed...")
     if (os_distro in yum_system_list):
-        wget_status = subprocess.check_output("echo $(yum list installed wget 2>/dev/null | grep -c 'Installed Packages')", shell=True)
+        wget_status = subprocess.check_output("echo $(yum list installed wget 2>/dev/null" +
+                                              " | grep -c 'Installed Packages')", shell=True)
     if (os_distro in apt_system_list):
-        wget_status = subprocess.check_output("echo $(dpkg-query -W -f='${Status}' wget 2>/dev/null | grep -c 'ok installed')", shell=True)
+        wget_status = subprocess.check_output("echo $(dpkg-query -W -f='${Status}' wget 2>/dev/null" +
+                                              " | grep -c 'ok installed')", shell=True)
     if ('1' in wget_status):
         print("Wget is already installed")
     elif ('0' in wget_status):
@@ -104,10 +106,14 @@ def install_java_yum():
         os.system("rm /opt/jdk*.tar.gz &>/dev/null")  # removes any compressed jdk files downloaded before
         os_arch = subprocess.check_output("uname -m | grep -c 64", shell=True)  # checks if the os is 64 or 32bit
         if ("1" in os_arch):
-            os.system('wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u45-b14/jdk-8u45-linux-x64.tar.gz" -P /opt')
+            os.system('wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2F' +
+                      'www.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com' +
+                      '/otn-pub/java/jdk/8u45-b14/jdk-8u45-linux-x64.tar.gz" -P /opt')
             os.system('tar xzf /opt/jdk-8u45-linux-x64.tar.gz -C /opt')
         elif ("0" in os_arch):
-            os.system('wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u45-b14/jdk-8u45-linux-i586.tar.gz" -P /opt')
+            os.system('wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2F' +
+                      'www.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com' +
+                      '/otn-pub/java/jdk/8u45-b14/jdk-8u45-linux-i586.tar.gz" -P /opt')
             os.system('tar xzf /opt/jdk-8u45-linux-i586.tar.gz -C /opt')
         os.system("rm /opt/jdk*.tar.gz &>/dev/null")
         os.system('alternatives --install /usr/bin/java java /opt/jdk1.8.0_45/bin/java 2')
@@ -209,7 +215,8 @@ def install_ncview_linux():
 def install_homebrew_wget():
     print("\nThe script will install Homebrew and Wget if necessary" +
           "\nChecking if Homebrew is installed...\n")
-    os.system('su $SUDO_USER -c \'ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"\'')
+    os.system('su $SUDO_USER -c \'ruby -e "$(curl -fsSL ' +
+              'https://raw.githubusercontent.com/Homebrew/install/master/install)"\'')
     print("\nChecking if Wget is installed...\n")
     os.system("su $SUDO_USER -c 'brew install wget'")
 
@@ -227,7 +234,9 @@ def check_java_mac():
 def install_java_mac():
     os.system("rm ~/Downloads/jdk*.dmg &>/dev/null")  # removes any setup files downloaded before
     print("Downloading Java JDK...\n")
-    os.system('wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u45-b14/jdk-8u45-macosx-x64.dmg" -P ~/Downloads &>/dev/null')
+    os.system('wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; ' +
+              'oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk' +
+              '/8u45-b14/jdk-8u45-macosx-x64.dmg" -P ~/Downloads &>/dev/null')
     print("Download finished, please open your downloads folder and install JDK\n")
     raw_input("\nPress any key to continue after the JDK installation has finished")
 
@@ -260,12 +269,14 @@ def checklist_mac():
     needs_installation = None
     app_list = ['brew', 'wget', 'java', 'grads', 'ncview']
     for app in app_list:
-        if '0' in subprocess.check_output('which ' + app + ' | grep -c ' + app + '; exit 0', shell=True, stderr=subprocess.STDOUT):
+        if '0' in subprocess.check_output('which ' + app + ' | grep -c ' + app + '; exit 0',
+                                          shell=True, stderr=subprocess.STDOUT):
             print(app.capitalize() + "[NOT INSTALLED]")
             needs_installation = True
         else:
             print(app.capitalize() + " [INSTALLED]")
-    if '0' in subprocess.check_output('ls /Applications/Utilities/ | grep -c XQuartz', shell=True, stderr=subprocess.STDOUT):
+    if '0' in subprocess.check_output('ls /Applications/Utilities/ | grep -c XQuartz',
+                                      shell=True, stderr=subprocess.STDOUT):
         print("XQuartz [NOT INSTALLED]")
     else:
         print("XQuartz [INSTALLED]")
@@ -280,7 +291,8 @@ def checklist_linux():
     no_need_to_install = True
     app_list = ['wget', 'java', 'grads', 'ncview']
     for app in app_list:
-        if '0' in subprocess.check_output('which ' + app + ' | grep -c ' + app + '; exit 0', shell=True, stderr=subprocess.STDOUT):
+        if '0' in subprocess.check_output('which ' + app + ' | grep -c ' + app + '; exit 0',
+                                          shell=True, stderr=subprocess.STDOUT):
             print(app.capitalize() + " [NOT INSTALLED]")
             no_need_to_install = False
         else:
